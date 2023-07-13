@@ -15,4 +15,13 @@ use App\Http\Controllers\EmpleadoController;
 */
 
 
-Route::get('/', [EmpleadoController::class], 'index');
+Route::get('/', [EmpleadoController::class, 'index']);
+Route::post('/store', [EmpleadoController::class, 'store'])->name('store');
+Route::get('/fetch-all', [EmpleadoController::class, 'fetchAll'])->name('fetchAll');
+Route::get('/edit', [EmpleadoController::class, 'edit'])->name('edit');
+
+/*
+Route::delete('/delete', [EmployeeController::class, 'delete'])->name('delete');
+
+Route::post('/update', [EmployeeController::class, 'update'])->name('update');
+*/

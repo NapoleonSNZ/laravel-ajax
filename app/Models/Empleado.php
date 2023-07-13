@@ -8,7 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Empleado extends Model
 {
     use HasFactory;
-    protected $fillabel = [
-        'nombre','apellido','correo','telefono','direccion','avatar'
-    ];
+    protected $fillable = ['nombre','apellido','correo','telefono','direccion','avatar'];
 }

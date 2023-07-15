@@ -158,6 +158,129 @@
         });
     }
 
+    // delete employee ajax request
+    $(document).on('click', '.deleteIcon', function(e) {
+        e.preventDefault();
+        let id = $(this).attr('id');
+        let csrf = '{{ csrf_token() }}';
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              url: '{{ route('delete') }}',
+              method: 'delete',
+              data: {
+                id: id,
+                _token: csrf
+              },
+              success: function(response) {
+                console.log(response);
+                Swal.fire(
+                  'Deleted!',
+                  'Your file has been deleted.',
+                  'success'
+                )
+                fetchAllEmployees();
+              }
+            });
+          }
+        })
+      });
+
+        // delete employee ajax request
+        $(document).on('click', '.deleteIcon', function(e) {
+                e.preventDefault();
+                let id = $(this).attr('id');
+                let csrf = '{{ csrf_token() }}';
+                Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                    url: '{{ route('delete') }}',
+                    method: 'delete',
+                    data: {
+                        id: id,
+                        _token: csrf
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                        )
+                        fetchAllEmployees();
+                    }
+                    });
+                }
+                })
+            });
+        // update employee ajax request
+         $("#edit_employee_form").submit(function(e) {
+        e.preventDefault();
+        const fd = new FormData(this);
+        $("#edit_employee_btn").text('Updating...');
+        $.ajax({
+          url: '{{ route('update') }}',
+          method: 'post',
+          data: fd,
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function(res) {
+            if (res.status == 200) {
+              Swal.fire(
+                'Actualizado!',
+                'Empleado modificado con Éxito!',
+                'success'
+              )
+              fetchAllEmployees();
+            }
+            $("#edit_employee_btn").text('Actualizar Empleado');
+            $("#edit_employee_form")[0].reset();
+            $("#editEmployeeModal").modal('hide');
+          }
+        });
+      });
+            // edit employee ajax request
+        $(document).on('click', '.editIcon', function(e) {
+        e.preventDefault();
+        let id = $(this).attr('id');
+        $.ajax({
+          url: '{{ route('edit') }}',
+          method: 'get',
+          data: {
+            id: id,
+            _token: '{{ csrf_token() }}'
+          },
+          success: function(res) {
+            $("#nombre").val(res.nombre);
+            $("#apellido").val(res.apellido);
+            $("#correo").val(res.correo);
+            $("#telefono").val(res.telefono);
+            $("#direccion").val(res.direccion);
+            $("#avatar").html(
+              `<img src="storage/images/${res.avatar}" width="100" class="img-fluid img-thumbnail">`);
+            $("#emp_id").val(res.id);
+            $("#emp_avatar").val(res.avatar);
+          }
+        });
+      });
+
         // AJAX añadir nuevo
         $("#add_employee_form").submit(function(e) {
             e.preventDefault();
@@ -186,30 +309,9 @@
             });
         })
 
-        // edit employee ajax request
-      $(document).on('click', '.editIcon', function(e) {
-        e.preventDefault();
-        let id = $(this).attr('id');
-        $.ajax({
-          url: '{{ route('edit') }}',
-          method: 'get',
-          data: {
-            id: id,
-            _token: '{{ csrf_token() }}'
-          },
-          success: function(res) {
-            $("#nombre").val(res.nombre);
-            $("#apellido").val(res.apellido);
-            $("#correo").val(res.correo);
-            $("#telefono").val(res.telefono);
-            $("#direccion").val(res.direccion);
-            $("#avatar").html(
-              `<img src="storage/images/${res.avatar}" width="100" class="img-fluid img-thumbnail">`);
-            $("#emp_id").val(res.id);
-            $("#emp_avatar").val(res.avatar);
-          }
-        });
-      });
+
+
+
     </script>
 </body>
 

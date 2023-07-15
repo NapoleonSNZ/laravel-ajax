@@ -74,4 +74,36 @@ class EmpleadoController extends Controller
 		return response()->json($emp);
 	}
 
+    // handle update an employee ajax request
+	public function update(Request $request) {
+		$fileName = '';
+		$emp = Empleado::find($request->emp_id);
+		if ($request->hasFile('avatar')) {
+			$file = $request->file('avatar');
+			$fileName = time() . '.' . $file->getClientOriginalExtension();
+			$file->storeAs('public/images', $fileName);
+			if ($emp->avatar) {
+				Storage::delete('public/images/' .$emp->avatar);
+			}
+		} else {
+			$fileName = $request->emp_avatar;
+		}
+
+		$empData = ['nombre' => $request->nombre, 'apellido' => $request->apellido, 'correo' => $request->correo, 'telefono' => $request->telefono, 'direccion' => $request->direccion, 'avatar' => $fileName];
+
+		$emp->update($empData);
+		return response()->json([
+			'status' => 200,
+		]);
+	}
+
+        // handle delete an employee ajax request
+        public function delete(Request $request) {
+            $id = $request->id;
+            $emp = Empleado::find($id);
+            if (Storage::delete('public/images/' . $emp->avatar)) {
+                Empleado::destroy($id);
+            }
+        }
+
 }
